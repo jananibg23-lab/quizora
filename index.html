@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QUIZORA — Test Your Knowledge & Track Your Progress</title>
+  
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ==========================================================================
+       1. STICKY NAVBAR
+       ========================================================================== -->
+  <header class="navbar">
+    <div class="container navbar-container">
+      <div class="brand" onclick="navigateTo('dashboard')">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 11 12 14 22 4"></polyline>
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+          </svg>
+        </div>
+        <span>QUIZORA</span>
+      </div>
+
+      <ul class="nav-links" id="nav-links">
+        <li class="nav-item active" data-view="dashboard" onclick="navigateTo('dashboard')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          Dashboard
+        </li>
+        <li class="nav-item" data-view="history" onclick="navigateTo('history')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          History
+        </li>
+        <li class="nav-item" onclick="openCustomModal()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+          Custom Test
+        </li>
+        <li class="nav-item" onclick="openAboutModal()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          How It Works
+        </li>
+      </ul>
+
+      <div class="nav-actions">
+        <!-- Streak Indicator -->
+        <div class="streak-badge" id="streak-indicator" title="Consecutive quiz attempts">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 17c1.38 0 2.5-1.12 2.5-2.5 0-1.88-2.5-4.5-2.5-4.5s-2.5 2.62-2.5 4.5zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.88 16.59c-1.16 1.16-3.05 1.16-4.21 0-1.16-1.16-1.16-3.05 0-4.21L12 12l2.33 2.38c1.16 1.16 1.16 3.05-0.45 4.21z"></path></svg>
+          <span id="streak-count">0</span> Streak
+        </div>
+
+        <!-- Theme Toggle Switch -->
+        <button class="theme-toggle" id="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle Light/Dark Theme">
+          <svg id="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          <svg id="theme-icon-moon" style="display:none;" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+
+        <!-- Mobile Menu Hamburger -->
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle Mobile Menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       2. MAIN CONTENT VIEWS CONTAINER
+       ========================================================================== -->
+  <main class="container">
+
+    <!-- ------------------------------------------------------------------------
+         VIEW 1: DASHBOARD
+         ------------------------------------------------------------------------ -->
+    <section id="view-dashboard" class="view active">
+      <div class="dashboard-page">
+        
+        <!-- Hero Section -->
+        <div class="hero-card">
+          <div class="hero-content">
+            <div class="hero-pill">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              Smart Exam Preparation Platform
+            </div>
+            <h1 class="hero-title">Ready to test yourself?</h1>
+            <p class="hero-subtitle">Challenge your knowledge, track your progress, and improve with every attempt using real-time dynamic mock tests.</p>
+            <div class="hero-actions">
+              <button class="btn btn-primary btn-lg" onclick="startTest('quick')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                Start Quick Quiz
+              </button>
+              <button class="btn btn-secondary btn-lg" onclick="startTest('mock')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                Take Mock Test
+              </button>
+              <button class="btn btn-outline btn-lg" onclick="openCustomModal()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line></svg>
+                Create Custom Test
+              </button>
+            </div>
+          </div>
+          <div class="hero-illustration">
+            <div class="hero-graphic-circle"></div>
+            <div class="hero-badge-float">
+              <div style="font-size:2.2rem; font-weight:800; color:var(--primary);" id="hero-badge-score">0%</div>
+              <div style="font-size:0.8rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Overall Avg</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Performance Statistics Grid -->
+        <div>
+          <h2 class="section-title">Performance Overview</h2>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon-wrapper stat-icon-blue">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              </div>
+              <div class="stat-info">
+                <div class="stat-value" id="stat-tests-count">0</div>
+                <div class="stat-label">Tests Taken</div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon-wrapper stat-icon-emerald">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              </div>
+              <div class="stat-info">
+                <div class="stat-value" id="stat-avg-score">0%</div>
+                <div class="stat-label">Average Score</div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon-wrapper stat-icon-amber">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+              </div>
+              <div class="stat-info">
+                <div class="stat-value" id="stat-best-score">0%</div>
+                <div class="stat-label">Best Score</div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon-wrapper stat-icon-rose">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+              </div>
+              <div class="stat-info">
+                <div class="stat-value" id="stat-streak-val">0</div>
+                <div class="stat-label">Current Streak</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Action Cards Section -->
+        <div>
+          <h2 class="section-title">Test Modes</h2>
+          <div class="action-cards-grid">
+            <div class="action-card">
+              <div>
+                <div class="action-card-header">
+                  <div class="action-card-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                  </div>
+                  <span class="badge badge-category">Fast Pace</span>
+                </div>
+                <h3 class="action-card-title">Quick Quiz</h3>
+                <p class="action-card-desc">Perfect for quick practice sessions between study breaks.</p>
+                <div class="action-card-meta">
+                  <span>• 5 Questions</span>
+                  <span>• No Time Limit</span>
+                </div>
+              </div>
+              <button class="btn btn-primary" style="width:100%;" onclick="startTest('quick')">Start Quiz</button>
+            </div>
+
+            <div class="action-card">
+              <div>
+                <div class="action-card-header">
+                  <div class="action-card-icon" style="background:var(--warning-light); color:var(--warning);">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                  </div>
+                  <span class="badge badge-medium">Exam Simulation</span>
+                </div>
+                <h3 class="action-card-title">Full Mock Test</h3>
+                <p class="action-card-desc">Simulate a real online examination environment with countdown timer.</p>
+                <div class="action-card-meta">
+                  <span>• 15 Questions</span>
+                  <span>• 15-Min Timer</span>
+                </div>
+              </div>
+              <button class="btn btn-primary" style="width:100%;" onclick="startTest('mock')">Start Mock Test</button>
+            </div>
+
+            <div class="action-card">
+              <div>
+                <div class="action-card-header">
+                  <div class="action-card-icon" style="background:var(--accent-light); color:var(--accent);">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                  </div>
+                  <span class="badge badge-easy">Tailored</span>
+                </div>
+                <h3 class="action-card-title">Custom Test</h3>
+                <p class="action-card-desc">Configure specific category, difficulty level, timer limit, and question count.</p>
+                <div class="action-card-meta">
+                  <span>• Customizable</span>
+                  <span>• Flexible Timer</span>
+                </div>
+              </div>
+              <button class="btn btn-secondary" style="width:100%;" onclick="openCustomModal()">Customize Test</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Explore by Category Section -->
+        <div>
+          <h2 class="section-title">Explore by Category</h2>
+          <div class="categories-grid">
+            
+            <div class="category-card" onclick="startCategoryTest('web-dev')">
+              <div class="category-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+              </div>
+              <h3 class="category-name">Web Development</h3>
+              <p class="category-desc">HTML5, CSS3, Modern JavaScript, DOM APIs, and Web standards.</p>
+              <div class="category-footer">
+                <span>9 Questions Available</span>
+                <span>Start →</span>
+              </div>
+            </div>
+
+            <div class="category-card" onclick="startCategoryTest('general-knowledge')">
+              <div class="category-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+              </div>
+              <h3 class="category-name">General Knowledge</h3>
+              <p class="category-desc">World geography, history, literature, geography, and current topics.</p>
+              <div class="category-footer">
+                <span>9 Questions Available</span>
+                <span>Start →</span>
+              </div>
+            </div>
+
+            <div class="category-card" onclick="startCategoryTest('science-tech')">
+              <div class="category-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55A2 2 0 0 0 6.51 23.5h10.98a2 2 0 0 0 1.79-2.95l-5.069-10.127A2 2 0 0 1 14 9.527V2"></path><path d="M8.5 2h7"></path><path d="M7 16h10"></path></svg>
+              </div>
+              <h3 class="category-name">Science & Tech</h3>
+              <p class="category-desc">Physics, Chemistry, Space, Computing Systems, and AI principles.</p>
+              <div class="category-footer">
+                <span>9 Questions Available</span>
+                <span>Start →</span>
+              </div>
+            </div>
+
+            <div class="category-card" onclick="startCategoryTest('dsa')">
+              <div class="category-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+              </div>
+              <h3 class="category-name">Data Structures</h3>
+              <p class="category-desc">Arrays, Stacks, Queues, Trees, Graphs, Sorting & Complexity analysis.</p>
+              <div class="category-footer">
+                <span>9 Questions Available</span>
+                <span>Start →</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------------
+         VIEW 2: QUIZ / TEST INTERFACE
+         ------------------------------------------------------------------------ -->
+    <section id="view-quiz" class="view">
+      <div class="quiz-page">
+        
+        <!-- Quiz Top Navigation / Timer Header -->
+        <div class="quiz-header">
+          <div class="quiz-title-box">
+            <h2 id="quiz-title-text">Quick Quiz — Web Development</h2>
+          </div>
+
+          <div class="quiz-progress-wrapper">
+            <div class="quiz-progress-text">
+              <span>Question <strong id="quiz-curr-q-num">1</strong> of <strong id="quiz-total-q-num">5</strong></span>
+              <span id="quiz-progress-percent">20%</span>
+            </div>
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" id="quiz-progress-fill"></div>
+            </div>
+          </div>
+
+          <!-- Dynamic Timer Badge (visible if timed) -->
+          <div class="timer-box" id="quiz-timer-box" style="display:none;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span id="quiz-timer-display">15:00</span>
+          </div>
+        </div>
+
+        <!-- Quiz Main Body Grid -->
+        <div class="quiz-body-grid">
+          
+          <!-- Question Card Container -->
+          <div class="question-card">
+            <div class="question-meta">
+              <span class="badge badge-category" id="q-category-badge">Web Development</span>
+              <span class="badge badge-easy" id="q-difficulty-badge">Easy</span>
+            </div>
+
+            <h3 class="question-text" id="q-question-text">Loading question...</h3>
+
+            <!-- Options A / B / C / D Container -->
+            <div class="options-list" id="q-options-container">
+              <!-- Rendered dynamically -->
+            </div>
+
+            <!-- Question Action Controls -->
+            <div class="question-actions">
+              <button class="btn btn-flag" id="btn-flag-toggle" onclick="toggleFlagQuestion()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
+                <span id="flag-btn-text">Flag for Review</span>
+              </button>
+
+              <div style="display:flex; gap:0.75rem;">
+                <button class="btn btn-secondary" id="btn-prev-q" onclick="navigateQuestion(-1)">Previous</button>
+                <button class="btn btn-primary" id="btn-next-q" onclick="navigateQuestion(1)">Next Question</button>
+                <button class="btn btn-danger" id="btn-submit-q" style="display:none;" onclick="showSubmitModal()">Submit Test</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Sidebar Question Palette -->
+          <div class="palette-card">
+            <div class="palette-title">
+              <span>Question Palette</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+            </div>
+
+            <div class="palette-grid" id="palette-grid-container">
+              <!-- Rendered dynamically -->
+            </div>
+
+            <div class="palette-legend">
+              <div class="legend-item">
+                <div class="legend-dot" style="background:var(--primary);"></div>
+                <span>Answered</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-dot" style="background:var(--bg-app); border:1px solid var(--border);"></div>
+                <span>Unanswered</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-dot" style="background:var(--warning);"></div>
+                <span>Flagged for Review</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------------
+         VIEW 3: RESULT PAGE
+         ------------------------------------------------------------------------ -->
+    <section id="view-result" class="view">
+      <div class="result-page">
+        
+        <!-- Score Overview Hero -->
+        <div class="result-hero">
+          <h1 class="result-title">Test Completed!</h1>
+          <p class="result-subtitle" id="result-test-title">Quick Quiz — Web Development</p>
+
+          <!-- SVG Circular Score Ring -->
+          <div class="score-meter-container">
+            <svg class="score-svg" viewBox="0 0 160 160">
+              <circle class="score-bg-ring" cx="80" cy="80" r="70"></circle>
+              <circle class="score-progress-ring" id="score-circle-bar" cx="80" cy="80" r="70"></circle>
+            </svg>
+            <div class="score-text-overlay">
+              <span class="score-percent" id="res-score-percent">0%</span>
+              <span class="score-fraction" id="res-score-fraction">0 / 0 Correct</span>
+            </div>
+          </div>
+
+          <span class="badge badge-easy" id="res-status-badge" style="font-size:0.9rem; padding:0.4rem 1.2rem;">PASSED</span>
+
+          <!-- Performance Snapshot Dynamic Recommendation Card -->
+          <div class="snapshot-card">
+            <div class="snapshot-title">Performance Snapshot</div>
+            <p class="snapshot-desc" id="res-snapshot-msg">Evaluating your performance result...</p>
+          </div>
+        </div>
+
+        <!-- Result Metrics Grid -->
+        <div class="result-stats-grid">
+          <div class="result-stat-box">
+            <div class="result-stat-val" style="color:var(--primary);" id="res-total-q">0</div>
+            <div class="result-stat-lbl">Total Questions</div>
+          </div>
+          <div class="result-stat-box">
+            <div class="result-stat-val" style="color:var(--accent);" id="res-correct-q">0</div>
+            <div class="result-stat-lbl">Correct</div>
+          </div>
+          <div class="result-stat-box">
+            <div class="result-stat-val" style="color:var(--danger);" id="res-incorrect-q">0</div>
+            <div class="result-stat-lbl">Incorrect</div>
+          </div>
+          <div class="result-stat-box">
+            <div class="result-stat-val" style="color:var(--warning);" id="res-unanswered-q">0</div>
+            <div class="result-stat-lbl">Unanswered</div>
+          </div>
+          <div class="result-stat-box">
+            <div class="result-stat-val" style="color:var(--info);" id="res-time-spent">00:00</div>
+            <div class="result-stat-lbl">Time Spent</div>
+          </div>
+        </div>
+
+        <!-- Answer Review Section -->
+        <div>
+          <div class="review-header">
+            <h2 class="section-title" style="margin-bottom:0;">Review Answers</h2>
+            
+            <div class="filter-tabs">
+              <button class="filter-tab active" onclick="filterReview('all', this)">All Questions</button>
+              <button class="filter-tab" onclick="filterReview('correct', this)">Correct</button>
+              <button class="filter-tab" onclick="filterReview('incorrect', this)">Incorrect</button>
+              <button class="filter-tab" onclick="filterReview('unanswered', this)">Unanswered</button>
+            </div>
+          </div>
+
+          <div class="review-list" id="review-list-container">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Action Footer -->
+        <div style="display:flex; justify-content:center; gap:1rem; margin-top:1rem;">
+          <button class="btn btn-secondary btn-lg" onclick="retakeCurrentTest()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+            Retake Test
+          </button>
+          <button class="btn btn-primary btn-lg" onclick="navigateTo('dashboard')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            Back to Dashboard
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------------
+         VIEW 4: TEST HISTORY & PERFORMANCE CHART
+         ------------------------------------------------------------------------ -->
+    <section id="view-history" class="view">
+      <div class="history-page">
+        
+        <div style="display:flex; align-items:center; justify-content:space-between;">
+          <div>
+            <h1 style="font-size:1.8rem; font-weight:800;">Test History</h1>
+            <p style="color:var(--text-muted); font-size:0.95rem;">Track your test performance trends over time.</p>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="showClearHistoryModal()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            Clear History
+          </button>
+        </div>
+
+        <!-- SVG Performance Trend Graph -->
+        <div class="chart-card">
+          <h3 style="font-size:1.1rem; font-weight:700;">Score Progression Trend</h3>
+          <div class="chart-wrapper" id="history-chart-wrapper">
+            <!-- Pure SVG Trend Line Graph Rendered Here -->
+          </div>
+        </div>
+
+        <!-- History Attempts Table / Card List -->
+        <div class="history-table-card">
+          <div class="table-responsive">
+            <table class="history-table">
+              <thead>
+                <tr>
+                  <th>Date & Time</th>
+                  <th>Test Mode</th>
+                  <th>Category</th>
+                  <th>Questions</th>
+                  <th>Score</th>
+                  <th>Percentage</th>
+                </tr>
+              </thead>
+              <tbody id="history-table-body">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Empty History State -->
+          <div class="empty-state" id="history-empty-state" style="display:none;">
+            <div class="empty-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            </div>
+            <h3 class="empty-title">No tests completed yet</h3>
+            <p class="empty-desc">Complete your first quiz or mock test to start tracking your performance history.</p>
+            <button class="btn btn-primary" onclick="startTest('quick')">Start Quick Quiz</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==========================================================================
+       3. MODALS & CONFIRMATION DIALOGS
+       ========================================================================== -->
+  
+  <!-- Custom Test Modal -->
+  <div class="modal-overlay" id="custom-test-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Create Custom Test</h3>
+        <button class="modal-close" onclick="closeCustomModal()">&times;</button>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="custom-category">Select Category</label>
+        <select class="form-select" id="custom-category">
+          <option value="all">All Categories</option>
+          <option value="web-dev">Web Development</option>
+          <option value="general-knowledge">General Knowledge</option>
+          <option value="science-tech">Science & Tech</option>
+          <option value="dsa">Data Structures & Algorithms</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="custom-difficulty">Difficulty Level</label>
+        <select class="form-select" id="custom-difficulty">
+          <option value="all">All Difficulties</option>
+          <option value="Easy">Easy</option>
+          <option value="Medium">Medium</option>
+          <option value="Hard">Hard</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="custom-count">Number of Questions (5 - 20)</label>
+        <input type="number" class="form-input" id="custom-count" min="5" max="20" value="10">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="custom-timer">Time Limit (Minutes)</label>
+        <select class="form-select" id="custom-timer">
+          <option value="0">No Timer (Untimed)</option>
+          <option value="5">5 Minutes</option>
+          <option value="10" selected>10 Minutes</option>
+          <option value="15">15 Minutes</option>
+          <option value="20">20 Minutes</option>
+        </select>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeCustomModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="submitCustomModal()">Start Test</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Submit Confirmation Modal -->
+  <div class="modal-overlay" id="submit-confirm-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Submit your test?</h3>
+        <button class="modal-close" onclick="closeSubmitModal()">&times;</button>
+      </div>
+      <p style="color:var(--text-muted); margin-bottom:1.5rem;">Are you sure you want to finish and submit your test now?</p>
+
+      <div style="background:var(--bg-subtle); border-radius:var(--radius-md); padding:1rem; margin-bottom:1.5rem; display:flex; justify-content:space-around; text-align:center;">
+        <div>
+          <div style="font-weight:800; font-size:1.2rem; color:var(--primary);" id="sub-cnt-answered">0</div>
+          <div style="font-size:0.8rem; color:var(--text-muted);">Answered</div>
+        </div>
+        <div>
+          <div style="font-weight:800; font-size:1.2rem; color:var(--danger);" id="sub-cnt-unanswered">0</div>
+          <div style="font-size:0.8rem; color:var(--text-muted);">Unanswered</div>
+        </div>
+        <div>
+          <div style="font-weight:800; font-size:1.2rem; color:var(--warning);" id="sub-cnt-flagged">0</div>
+          <div style="font-size:0.8rem; color:var(--text-muted);">Flagged</div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeSubmitModal()">Continue Test</button>
+        <button class="btn btn-danger" onclick="confirmSubmitTest()">Submit Test</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Clear History Confirmation Modal -->
+  <div class="modal-overlay" id="clear-history-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Clear Test History?</h3>
+        <button class="modal-close" onclick="closeClearHistoryModal()">&times;</button>
+      </div>
+      <p style="color:var(--text-muted); margin-bottom:1.5rem;">This action will permanently delete all your stored test attempts and reset your dashboard statistics. This cannot be undone.</p>
+      
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeClearHistoryModal()">Cancel</button>
+        <button class="btn btn-danger" onclick="confirmClearHistory()">Clear History</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- About / How It Works Modal -->
+  <div class="modal-overlay" id="about-modal">
+    <div class="modal-card" style="max-width:600px;">
+      <div class="modal-header">
+        <h3 class="modal-title">About QUIZORA Platform</h3>
+        <button class="modal-close" onclick="closeAboutModal()">&times;</button>
+      </div>
+      <div style="color:var(--text-muted); line-height:1.6; font-size:0.95rem; display:flex; flex-direction:column; gap:1rem;">
+        <p><strong>QUIZORA</strong> is a dynamic online examination and quiz application designed using vanilla HTML5, CSS3, and JavaScript.</p>
+        <div style="background:var(--bg-subtle); padding:1rem; border-radius:var(--radius-md);">
+          <strong style="color:var(--text-main);">Key Features & Viva Concepts:</strong>
+          <ul style="margin-left:1.25rem; margin-top:0.5rem; display:flex; flex-direction:column; gap:0.25rem;">
+            <li><strong>DOM Manipulation:</strong> Dynamic view swapping & component rendering.</li>
+            <li><strong>State & LocalStorage:</strong> Persistent history, streak, and dark/light themes.</li>
+            <li><strong>Timer System:</strong> `setInterval` timer with low-time visual alerts.</li>
+            <li><strong>Dynamic Randomization:</strong> Fisher-Yates shuffle algorithm for questions & options.</li>
+            <li><strong>Custom Pure SVG Charts:</strong> Score progression trend rendered using inline SVG polylines.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="modal-actions" style="margin-top:1.5rem;">
+        <button class="btn btn-primary" onclick="closeAboutModal()">Got It</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       4. FOOTER
+       ========================================================================== -->
+  <footer class="footer">
+    <div class="container footer-container">
+      <div class="footer-brand">
+        <div class="brand-icon" style="width:28px; height:28px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 11 12 14 22 4"></polyline></svg>
+        </div>
+        <span>QUIZORA</span>
+      </div>
+      <div>QUIZORA — A dynamic quiz and mock test platform</div>
+      <div>Built with HTML • CSS • JavaScript</div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/questions.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
